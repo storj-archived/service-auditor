@@ -1,0 +1,40 @@
+{
+  "name": "storj-service-auditor",
+  "version": "0.0.1",
+  "description": "send and retrieve queued storj audit proofs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Storj/service-auditor.git"
+  },
+  "keywords": [
+    "storj",
+    "renter",
+    "bridge",
+    "audit",
+    "proof"
+  ],
+  "author": "Ryan Foran <rforan@storj.io>",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Storj/service-auditor/issues"
+  },
+  "homepage": "https://github.com/Storj/service-auditor#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.6",
+    "ink-docstrap": "^1.1.4",
+    "istanbul": "^0.4.1",
+    "jsdoc": "^3.4.0",
+    "jshint": "2.8.0",
+    "mocha": "^2.3.4",
+    "proxyquire": "^1.7.3",
+    "sinon": "^1.17.2"
+  },
+  "dependencies": {
+    "restify": "^4.1.1"
+  }
+}
