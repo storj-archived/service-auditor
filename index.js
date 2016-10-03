@@ -1,22 +1,22 @@
-const restify = require('restify');
-const errors = require('storj-service-error-types');
-const config = require('./config');
-const auditInterface = require('./lib/index').interface;
+const Restify = require('restify');
+const Errors = require('storj-service-error-types');
+const Config = require('./config');
+const AuditInterface = require('./lib/index').interface;
 
 function AuditServer() {
-  this._auditor = new auditInterface();
-  this.server = restify.createServer({
+  this._auditor = new AuditInterface();
+  this.server = Restify.createServer({
     name: 'service-auditor'
   });
 
-  server.use(restify.bodyParser({
+  this.server.use(Restify.bodyParser({
     maxBodySize: 0,
     mapParams: true,
     mapFiles: false,
     overrideParams: true
   }));
 
-  server.post('/audit',
+  this.server.post('/audit',
     (req, res, next) => {
       req.accepts('application/json');
       try {
@@ -48,7 +48,7 @@ function AuditServer() {
         }),
         function(err, count) {
           if (err) {
-            return next(errors.InternalError);
+            return next(Errors.InternalError);
           }
 
           res.send(201);
