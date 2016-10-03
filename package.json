@@ -35,6 +35,13 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
-    "restify": "^4.1.1"
+    "minimist":"1.2.0",
+    "rc": "^1.1.6",
+    "restify": "^4.1.1",
+    "storj-complex": "^1.0.0",
+    "storj-lib": "4.0.0-rc.7",
+    "storj-mongo-adapter": "^1.0.2",
+    "storj-service-storage-models": "^1.0.1",
+    "storj-service-error-types": "^1.0.0"
   }
 }
