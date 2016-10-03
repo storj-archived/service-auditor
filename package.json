@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "send and retrieve queued storj audit proofs",
   "main": "index.js",
+  "bin": {
+    "storj-service-auditor": "bin/storj-service-auditor.js"
+  },
   "scripts": {
     "test": "mocha test/**"
   },
@@ -35,13 +38,14 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
-    "minimist":"1.2.0",
-    "rc": "^1.1.6",
-    "restify": "^4.1.1",
+    "async": "2.0.1",
+    "kad-logger-json": "0.1.2",
+    "rc": "1.1.6",
+    "redis": "2.6.2",
+    "restify": "4.1.1",
     "storj-complex": "^1.0.0",
-    "storj-lib": "4.0.0-rc.7",
-    "storj-mongo-adapter": "^1.0.2",
-    "storj-service-storage-models": "^1.0.1",
+    "storj-lib": "^4.0.0",
+    "storj-service-storage-models": "^2.0.0",
     "storj-service-error-types": "^1.0.0"
   }
 }

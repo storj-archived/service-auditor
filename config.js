@@ -25,7 +25,7 @@ const Config = require('rc')('AUDITSERVICE', {
     polling: {
       interval: 10000,
       padding: 1000
-    }
+    },
     maxConcurrency: 20,
     workers: [123]
   }
