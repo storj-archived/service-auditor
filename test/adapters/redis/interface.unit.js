@@ -3,9 +3,9 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const RQueue = require('../../../../lib/audit/adapters/redis/queue.js');
-const Config = require('../../../../lib/config')('devel').audits;
-const AuditInterface = require('../../../../lib/audit/abstractauditinterface');
+const RQueue = require('../../../lib/adapters/redis/queue.js');
+const Config = require('../../../config').auditor;
+const AuditInterface = require('../../../lib/abstractauditinterface');
 
 var stubRefs = {
   queue: sinon.spy(RQueue),
@@ -28,7 +28,7 @@ var stubRefs = {
 };
 
 var Interface = proxyquire(
-  '../../../../lib/audit/adapters/redis/interface.js', {
+  '../../../lib/adapters/redis/interface.js', {
     'redis' : {
       createClient: function(){
         return {
@@ -63,13 +63,13 @@ describe('audit/adapters/redis/interface', function() {
     });
 
     it('calls failHandler on failed messages', function() {
-      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.fail, 'fail')
+      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.fail, 'false')
       service = new Interface(Object.assign({}, Config.adapter));
       expect(stubRefs.fail.called).to.be.true;
     });
 
     it('calls passHandler on passed messages', function() {
-      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.pass, 'pass')
+      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.pass, 'true')
       service = new Interface(Object.assign({}, Config.adapter));
       expect(stubRefs.pass.called).to.be.true;
     });
