@@ -2,9 +2,9 @@
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const Config = require('../../../../lib/config')('devel').audits;
+const Config = require('../../../config');
 const proxyquire = require('proxyquire');
-const RedQueue = require('../../../../lib/audit/adapters/redis/queue.js');
+const RedQueue = require('../../../lib/adapters/redis/queue.js');
 
 var testAudits = [
   {
@@ -56,7 +56,7 @@ clientStubs.multi.returns({
 
 stubRefs.createClient.returns(clientStubs);
 
-var Queue = proxyquire('../../../../lib/audit/adapters/redis/queue.js', {
+var Queue = proxyquire('../../../lib/adapters/redis/queue.js', {
   'redis' : {
     createClient: stubRefs.createClient
   }
@@ -65,7 +65,7 @@ var Queue = proxyquire('../../../../lib/audit/adapters/redis/queue.js', {
 stubRefs._get = sinon.stub(Queue.prototype, '_get');
 
 describe('audit/adapters/redis/queue', function() {
-  var service = new Queue({test: 1}, 123);
+  var service = new Queue(123, {test: 1});
 
   describe('@constructor', function() {
     it('should take a redis config object', function() {
@@ -76,17 +76,13 @@ describe('audit/adapters/redis/queue', function() {
       expect(service._uuid).to.equal(123);
     });
 
-    it('should set a default uuid of undefined', function() {
-      service = new Queue({test: 1});
+    it('should set a uuid of undefined if falsey', function() {
+      service = new Queue(false, {test: 1});
       expect(service._uuid).to.equal('undefined');
     });
 
     it('should create a redis client connection', function() {
       expect(service.client).to.exist;
-    });
-
-    it('should create a client for redis pubsub', function() {
-      expect(service.pubSubClient).to.exist;
     });
 
     it('should create a client for blocking redis operations', function() {
@@ -171,7 +167,7 @@ describe('audit/adapters/redis/queue', function() {
       var startInd = clientStubs.multi.args[0][0][1];
       var tempAudit;
       var auditRes = [];
-      
+
       expect(startInd[0]).to.equal('RPUSH');
       expect(startInd[1]).to.equal(RedQueue.sharedKeys.ready);
       expect(startInd[2]).to.equal(JSON.stringify(testAudits[0]));
