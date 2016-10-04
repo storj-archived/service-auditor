@@ -3,10 +3,9 @@
 const fork = require('process').fork;
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const clone = require('merge').clone;
 const proxyquire = require('proxyquire');
-const AuditQueue = require('../../../../lib/audit/adapters/redis/queue.js');
-const Config = require('../../../../lib/config')('devel').audits;
+const AuditQueue = require('../../../lib/adapters/redis/queue.js');
+const Config = require('../../../config');
 
 var popSpy = sinon.spy(AuditQueue.prototype, 'populateReadyQueue');
 var forkStub = function() {
@@ -15,9 +14,9 @@ var forkStub = function() {
   }
 }
 
-var AuditService = proxyquire('../../../../lib/audit/adapters/redis/service.js',
+var AuditService = proxyquire('../../../lib/adapters/redis/service.js',
  {
-  '../../../../lib/audit/adapters/redis/queue.js': AuditQueue,
+  '../../../lib/adapters/redis/queue.js': AuditQueue,
   'child_process': {
     fork: forkStub
   }
@@ -41,15 +40,15 @@ describe('audit/adapters/redis/service', function() {
     });
 
     it('should not call #pollBacklog if polling option disabled', function() {
-      config = clone(Config);
-      config.adapter.polling = undefined;
+      config = JSON.parse(JSON.stringify(Config));
+      config.auditor.polling = undefined;
       service = new AuditService(config);
       expect(service.pollBacklog.called).to.be.false;
     });
 
     it('should call #pollBacklog if polling option enabled', function() {
-      config = clone(Config);
-      config.adapter.polling = {
+      config = JSON.parse(JSON.stringify(Config));
+      config.auditor.polling = {
         interval: 500,
         padding: 0
       };
@@ -62,19 +61,19 @@ describe('audit/adapters/redis/service', function() {
       function() {
         AuditService.prototype.addNewWorkerToQueue.restore();
         sinon.spy(AuditService.prototype, 'addNewWorkerToQueue');
-        config = clone(Config);
+        config = JSON.parse(JSON.stringify(Config));
         service = new AuditService(config);
-        expect(service._options.workers.length)
+        expect(service._options.auditor.workers.length)
           .to.equal(service.addNewWorkerToQueue.callCount);
         AuditService.prototype.addNewWorkerToQueue.restore();
     });
 
     it('should repoll at a configured interval', function(done) {
       this.timeout(1000);
-      config = clone(Config);
-      config.adapter.polling.interval = 500;
+      config = JSON.parse(JSON.stringify(Config));
+      config.auditor.polling.interval = 500;
       service = new AuditService(config);
-      setTimeout(testPolled, config.adapter.polling.interval + 100);
+      setTimeout(testPolled, config.auditor.polling.interval + 100);
 
       function testPolled() {
         expect(service.pollBacklog.calledTwice).to.be.true;
@@ -85,24 +84,24 @@ describe('audit/adapters/redis/service', function() {
 
   describe('#addNewWorkerToQueue', function() {
     before(function() {
-      config = clone(Config);
+      config = JSON.parse(JSON.stringify(Config));
       service = new AuditService(config);
     });
 
     it('should fork a process for each optional worker', function() {
-      expect(service._options.workers.length === forkStub.callCount);
+      expect(service._options.auditor.workers.length === forkStub.callCount);
     });
   });
 
   describe('#pollBacklog', function() {
     it('should accept a current time padding',
       function() {
-        config = clone(Config);
-        config.adapter.polling.interval = 500;
-        config.adapter.polling.padding = 100;
+        config = JSON.parse(JSON.stringify(Config));
+        config.auditor.polling.interval = 500;
+        config.auditor.polling.padding = 100;
         service = new AuditService(config);
         expect(service.pollBacklog.getCall(0).args[0]
-          === config.adapter.polling.padding).to.be.true;
+          === config.auditor.polling.padding).to.be.true;
     });
 
     it('should call populateReadyQueue',
