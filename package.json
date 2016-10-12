@@ -11,7 +11,6 @@
     "testsuite": "NODE_ENV=test _mocha test/**",
     "coverage": "NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive",
     "linter": "./node_modules/.bin/jshint --config .jshintrc ./index.js ./lib ./test",
-    "test": "npm run testsuite && npm run linter",
     "develop": "NODE_ENV=develop node script/develop.js start",
     "make-docs": "./node_modules/.bin/jsdoc index.js lib -r -R README.md -u ./doc -c .jsdoc.json --verbose -d ./jsdoc"
   },
@@ -40,6 +39,7 @@
     "jsdoc": "^3.4.0",
     "jshint": "2.8.0",
     "mocha": "^2.3.4",
+    "noisegen": "^1.0.0",
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.2"
   },
@@ -51,7 +51,8 @@
     "restify": "4.1.1",
     "storj-complex": "^1.0.0",
     "storj-lib": "^4.0.0",
-    "storj-service-storage-models": "^2.0.0",
-    "storj-service-error-types": "^1.0.0"
+    "storj-mongodb-adapter": "^2.0.1",
+    "storj-service-error-types": "^1.0.0",
+    "storj-service-storage-models": "^2.1.0"
   }
 }

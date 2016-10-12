@@ -4,7 +4,7 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const Async = require('async');
-const Config = require('../../../../lib/config')('devel').audits;
+const Config = require('../../../config');
 
 var stubRefs = {
   recallStub: sinon.stub(),
@@ -17,10 +17,6 @@ var stubRefs = {
   queueStub: sinon.spy(Async, 'queue')
 };
 
-stubRefs.recallStub.callsArgWith(1, null, {
-  map: sinon.stub()
-});
-
 stubRefs.auditorStub.getPendingQueue.callsArgWith(0, null, [1,2,3]);
 stubRefs.auditorStub.get.onCall(0).callsArgWith(0, null, 1);
 stubRefs.auditorStub.get.onCall(1).callsArgWith(0, null, 1);
@@ -28,32 +24,12 @@ stubRefs.auditorStub.get.onCall(2).callsArgWith(0, null, 1);
 stubRefs.auditorStub.process.callsArgWith(1);
 
 const AuditQueueWorker = proxyquire(
-  '../../../../lib/audit/adapters/redis/auditqueueworker.js', {
-    'storj': {
-      StorageManager: sinon.stub(),
-      Manager: sinon.stub(),
-      KeyPair: sinon.stub(),
-      RenterInterface: stubRefs.renterStub
-    },
-    '../../../storage/adapter': sinon.stub(),
-    '../../../storage': function() {
-      return {
-        models: {
-          Contact: {
-            recall: stubRefs.recallStub
-          }
-        }
-      };
-    },
+  '../../../lib/adapters/redis/auditqueueworker.js', {
     './auditor.js': function() {
       return stubRefs.auditorStub;
     },
     'async': stubRefs.queueStub
   }
-);
-
-stubRefs.createStub = sinon.spy(AuditQueueWorker.prototype,
-  '_createConnection'
 );
 
 stubRefs.initStub = sinon.stub(
@@ -66,17 +42,12 @@ stubRefs.flushStub = sinon.spy(AuditQueueWorker.prototype,
   '_flushStalePendingQueue'
 );
 
-var config = Object.assign(Config.workers[0], {redis: Config.redis});
-var service = new AuditQueueWorker(config);
+var service = new AuditQueueWorker(Config);
 
 describe('audit/adapters/redis/auditqueueworker', function() {
   describe('@constructor', function() {
-    it('should recall contacts from the storage adapter', function() {
-      expect(stubRefs.recallStub.called).to.be.true;
-    });
-
-    it('should create a connection', function() {
-      expect(stubRefs.createStub.called).to.be.true;
+    it('should take an options object', function() {
+      expect(service._options).to.be.an.object;
     });
 
     it('should instantiate an Auditor', function() {
@@ -94,8 +65,10 @@ describe('audit/adapters/redis/auditqueueworker', function() {
     });
 
     it('should call the queue with the config limit', function() {
-      expect(stubRefs.queueStub.calledWith(sinon.match.any, config.limit))
-        .to.be.true;
+      expect(stubRefs.queueStub.calledWith(
+        sinon.match.any,
+        Config.auditor.maxConcurrency
+      )).to.be.true;
     });
 
     it('should retrieve the pending queue on start', function() {
@@ -115,7 +88,7 @@ describe('audit/adapters/redis/auditqueueworker', function() {
         '_initDispatchQueue'
       );
       //stubRefs.dispatchStub.
-      service = new AuditQueueWorker(config);
+      service = new AuditQueueWorker(Config);
     });
 
     after(function() {
@@ -123,8 +96,10 @@ describe('audit/adapters/redis/auditqueueworker', function() {
     });
 
     it('should call the queue with the config limit', function() {
-      expect(stubRefs.queueStub.calledWith(sinon.match.any, config.limit))
-        .to.be.true;
+      expect(stubRefs.queueStub.calledWith(
+        sinon.match.any,
+        Config.auditor.maxConcurrency
+      )).to.be.true;
     });
 
     it('should get an audit via the auditor\'s get method', function() {
