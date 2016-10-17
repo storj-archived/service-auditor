@@ -2,9 +2,10 @@
   "name": "storj-service-auditor",
   "version": "0.0.1",
   "description": "send and retrieve queued storj audit proofs",
-  "main": "index.js",
+  "main": "/lib/index.js",
   "bin": {
-    "storj-service-auditor": "bin/storj-service-auditor.js"
+    "storj-service-auditor": "bin/storj-service-auditor.js",
+    "storj-service-auditor-server": "bin/storj-service-auditor-server.js"
   },
   "scripts": {
     "test": "npm run testsuite && npm run linter",
