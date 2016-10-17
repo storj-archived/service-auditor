@@ -3,7 +3,12 @@
 const Config = require('rc')('storj-service-auditor', {
   server: {
     host: '127.0.0.1',
-    port: 6541
+    port: 6541,
+    timeout: 120000,
+    cert: null,
+    key: null,
+    ca: [],
+    passphrase: null,
   },
 
   db: {
