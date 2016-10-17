@@ -66,32 +66,28 @@ auditor.on('audit.full.fail', function(audit) {
 ### Endpoints
 | Route   | Method | Parameters  | Description |
 |---------|--------|-------------|-------------|
-| /audit  | POST   | farmer_id, data_hash, root
-depth
-challenges
-store_begin
-store_end  
+| /audit  | POST   | farmer_id, data_hash, root, depth, challenges, store_begin, store_end | add a series of audits to the processing queue  
 
 Config
 ------
 See config.js for defaults; config options are set by the following rules:  
-&nbsp;&nbsp;  - command line arguments (parsed by minimist)
-&nbsp;&nbsp;  - environment variables prefixed with `storj-service-auditor_`
-&nbsp;&nbsp;  - or use "\_\_" to indicate nested properties <br/> _(e.g. `storj-service-auditor_foo__bar__baz` => `foo.bar.baz`)_
-&nbsp;&nbsp;  - if you passed an option `--config file` then from that file
-&nbsp;&nbsp;  - a local `.storj-service-auditorrc` or the first found looking in `./ ../ ../../ ../../../` etc.
-&nbsp;&nbsp;  - `$HOME/.storj-service-auditorrc`
-&nbsp;&nbsp;  - `$HOME/.storj-service-auditor/config`
-&nbsp;&nbsp;  - `$HOME/.config/storj-service-auditor`
-&nbsp;&nbsp;  - `$HOME/.config/storj-service-auditor/config`
-&nbsp;&nbsp;  - `/etc/storj-service-auditorrc`
-&nbsp;&nbsp;  - `/etc/${appname}/config`
-&nbsp;&nbsp;  - the defaults object you passed in.
+  - command line arguments (parsed by minimist)
+  - environment variables prefixed with `storj-service-auditor_`
+  - or use "\_\_" to indicate nested properties <br/> _(e.g. `storj-service-auditor_foo__bar__baz` => `foo.bar.baz`)_
+  - if you passed an option `--config file` then from that file
+  - a local `.storj-service-auditorrc` or the first found looking in `./ ../ ../../ ../../../` etc.
+  - `$HOME/.storj-service-auditorrc`
+  - `$HOME/.storj-service-auditor/config`
+  - `$HOME/.config/storj-service-auditor`
+  - `$HOME/.config/storj-service-auditor/config`
+  - `/etc/storj-service-auditorrc`
+  - `/etc/${appname}/config`
+  - the defaults object you passed in.
 
 License
 -------
 
-Storj Complex - Manage many renter nodes with remote control capabilities  
+storj-service-auditor - send and retrieve queued storj audit proofs
 Copyright (C) 2016 Storj Labs, Inc
 
 This program is free software: you can redistribute it and/or modify
