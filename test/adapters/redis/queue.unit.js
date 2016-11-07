@@ -1,8 +1,7 @@
-'use strict'
+'use strict';
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
-const Config = require('../../../config');
 const proxyquire = require('proxyquire');
 const RedQueue = require('../../../lib/adapters/redis/queue.js');
 
@@ -52,7 +51,7 @@ var clientStubs = {
 
 clientStubs.multi.returns({
   exec: clientStubs.exec
-})
+});
 
 stubRefs.createClient.returns(clientStubs);
 
@@ -121,13 +120,12 @@ describe('audit/adapters/redis/queue', function() {
   });
 
   describe('populateReadyQueue', function() {
-    var command;
     var result;
 
     before(function(done) {
       //clientStubs.watch.callsArgWith(1, null, 'OK');
-      clientStubs.exec.callsArgWith(0, null, ['test', 1])
-      stubRefs._get.callsArgWith(2, null, [])
+      clientStubs.exec.callsArgWith(0, null, ['test', 1]);
+      stubRefs._get.callsArgWith(2, null, []);
       service.populateReadyQueue(null, null, function(err, success) {
         result = success;
         done();
@@ -148,7 +146,7 @@ describe('audit/adapters/redis/queue', function() {
     });
 
     it('should call multi command if items are ready', function() {
-      stubRefs._get.callsArgWith(2, null, testAudits)
+      stubRefs._get.callsArgWith(2, null, testAudits);
       service.populateReadyQueue(null, null, function(err, success) {
         result = success;
       });
@@ -165,8 +163,6 @@ describe('audit/adapters/redis/queue', function() {
 
     it('should call the RPUSH command', function() {
       var startInd = clientStubs.multi.args[0][0][1];
-      var tempAudit;
-      var auditRes = [];
 
       expect(startInd[0]).to.equal('RPUSH');
       expect(startInd[1]).to.equal(RedQueue.sharedKeys.ready);
@@ -239,7 +235,7 @@ describe('audit/adapters/redis/queue', function() {
         sadd: clientStubs.sadd
       });
 
-      clientStubs.exec.callsArgWith(0, null, [2, 2])
+      clientStubs.exec.callsArgWith(0, null, [2, 2]);
 
       service.pushResultQueue(testAudits[0], true, function(err, success) {
         result = success;
@@ -282,7 +278,7 @@ describe('audit/adapters/redis/queue', function() {
     });
 
     it('should place items on the failed queue when false is passed', function(done) {
-      service.pushResultQueue(testAudits[0], false, function(err, success) {
+      service.pushResultQueue(testAudits[0], false, function() {
         expect(clientStubs.sadd.args[6][0]).to.equal('storj:audit:full:fail');
         done();
       });
@@ -292,15 +288,15 @@ describe('audit/adapters/redis/queue', function() {
   describe('_get', function() {
     before(function() {
       stubRefs._get.restore();
-      service._get(0, 0, function(err, audits){});
+      service._get(0, 0, function(){});
     });
 
     it('should call the ZRANGEBYSCORE command', function() {
       var baseArgs = clientStubs.ZRANGEBYSCORE.args[0][0];
       expect(clientStubs.ZRANGEBYSCORE.called).to.be.true;
-      expect(baseArgs[0]).to.equal(RedQueue.sharedKeys.backlog)
-      expect(baseArgs[1]).to.equal(0)
-      expect(baseArgs[2]).to.equal(0)
+      expect(baseArgs[0]).to.equal(RedQueue.sharedKeys.backlog);
+      expect(baseArgs[1]).to.equal(0);
+      expect(baseArgs[2]).to.equal(0);
     });
   });
 

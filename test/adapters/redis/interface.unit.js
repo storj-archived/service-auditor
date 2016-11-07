@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
@@ -34,7 +34,7 @@ var Interface = proxyquire(
         return {
           subscribe: stubRefs.subscribe,
           on: stubRefs.on
-        }
+        };
       }
     },
     '../../abstractauditinterface': stubRefs.abs,
@@ -63,13 +63,13 @@ describe('audit/adapters/redis/interface', function() {
     });
 
     it('calls failHandler on failed messages', function() {
-      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.fail, 'false')
+      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.fail, 'false');
       service = new Interface(Object.assign({}, Config.adapter));
       expect(stubRefs.fail.called).to.be.true;
     });
 
     it('calls passHandler on passed messages', function() {
-      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.pass, 'true')
+      stubRefs.on.callsArgWith(1, RQueue.sharedKeys.pass, 'true');
       service = new Interface(Object.assign({}, Config.adapter));
       expect(stubRefs.pass.called).to.be.true;
     });
@@ -101,6 +101,6 @@ describe('audit/adapters/redis/interface', function() {
 
     it('creates a job per challenge', function() {
       expect(jobs.length).to.equal(5);
-    })
+    });
   });
 });

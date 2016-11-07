@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const expect = require('chai').expect;
 const sinon = require('sinon');
@@ -48,9 +48,8 @@ var Auditor = proxyquire(
 var service;
 var config = JSON.parse(JSON.stringify(Config));
 
-
-config.auditor.uuid = config.auditor.workers[0];
-delete config.auditor.workers[0];
+config.auditor.uuid = config.auditor.workers.split(' ')[0];
+delete config.auditor.workers;
 service = new Auditor(config);
 
 describe('audit/adapters/redis/auditor', function() {
@@ -153,7 +152,7 @@ describe('audit/adapters/redis/auditor', function() {
     });
 
     it('attempts to locate an in-storage contact', function() {
-      expect(service._storjModels.Contact.findOne.called).to.be.true
+      expect(service._storjModels.Contact.findOne.called).to.be.true;
     });
 
     it('gets a storageItem from the audit hash', function() {

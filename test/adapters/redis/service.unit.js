@@ -1,6 +1,5 @@
-'use strict'
+'use strict';
 
-const fork = require('process').fork;
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
@@ -11,8 +10,8 @@ var popSpy = sinon.spy(AuditQueue.prototype, 'populateReadyQueue');
 var forkStub = function() {
   return {
     on: sinon.stub()
-  }
-}
+  };
+};
 
 var AuditService = proxyquire('../../../lib/adapters/redis/service.js',
  {
@@ -63,8 +62,9 @@ describe('audit/adapters/redis/service', function() {
         sinon.spy(AuditService.prototype, 'addNewWorkerToQueue');
         config = JSON.parse(JSON.stringify(Config));
         service = new AuditService(config);
-        expect(service._options.auditor.workers.length)
-          .to.equal(service.addNewWorkerToQueue.callCount);
+        var workers = service._options.auditor.workers.split(' ');
+
+        expect(workers.length).to.equal(service.addNewWorkerToQueue.callCount);
         AuditService.prototype.addNewWorkerToQueue.restore();
     });
 
@@ -89,7 +89,8 @@ describe('audit/adapters/redis/service', function() {
     });
 
     it('should fork a process for each optional worker', function() {
-      expect(service._options.auditor.workers.length === forkStub.callCount);
+      var workers = service._options.auditor.workers.split(' ');
+      expect(workers.length === forkStub.callCount);
     });
   });
 

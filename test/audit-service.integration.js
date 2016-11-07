@@ -1,4 +1,5 @@
-'use strict'
+
+'use strict';
 
 const os = require('os');
 const fs = require('fs');
@@ -35,29 +36,29 @@ describe('Audit/Integration', function() {
     Queue.sharedKeys.ready,
     Queue.sharedKeys.pass,
     Queue.sharedKeys.fail,
-    "storj:audit:full:pending:123"
+    'storj:audit:full:pending:123'
   );
 
   subscriber.on('message', function(channel, msg){
     switch (channel) {
       case Queue.sharedKeys.backlog:
-        channel = 'backlog'
+        channel = 'backlog';
         break;
       case Queue.sharedKeys.ready:
-        channel = 'ready'
+        channel = 'ready';
         break;
       case Queue.sharedKeys.pass:
-        channel = 'pass'
+        channel = 'pass';
         break;
       case Queue.sharedKeys.fail:
-        channel = 'fail'
+        channel = 'fail';
         break;
-      case "storj:audit:full:pending:123":
-        channel = 'pending'
+      case 'storj:audit:full:pending:123':
+        channel = 'pending';
         break;
     }
 
-    auditResponses[channel].push(msg)
+    auditResponses[channel].push(msg);
 
   });
 
@@ -105,9 +106,7 @@ describe('Audit/Integration', function() {
       var randomio = noisegen({ length: 1024 * 1024 * 32 });
       var target = fs.createWriteStream(filePath);
       target.on('finish', function() {
-        client.getBuckets(function(err, buckets) {
-
-          if (err) { return done(err); }
+        client.getBuck, hasAuditseturn done(err); }
           client.createToken(buckets[0].id, 'PUSH', function(err, token) {
             if (err) { return done(err); }
             client.storeFileInBucket(
