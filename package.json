@@ -4,8 +4,9 @@
   "description": "send and retrieve queued storj audit proofs",
   "main": "/lib/index.js",
   "bin": {
-    "storj-service-auditor": "bin/storj-service-auditor.js",
-    "storj-service-auditor-server": "bin/storj-service-auditor-server.js"
+    "storj-audits-worker": "bin/worker.js",
+    "storj-audits-polling": "bin/polling.js",
+    "storj-audits-server": "bin/audits-server.js"
   },
   "scripts": {
     "test": "npm run testsuite && npm run linter",

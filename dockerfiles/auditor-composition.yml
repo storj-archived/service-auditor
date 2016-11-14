@@ -1,0 +1,39 @@
+version: '2'
+services:
+  polling-service:
+    image: storjlabs/auditor-polling-service
+    links:
+      - redis
+    volumes:
+      - "../lib:/polling-service/lib"
+      - "../bin:/polling-service/bin"
+      - "../config.js:/polling-service/config.js"
+    build:
+      context: ..
+      dockerfile: ./dockerfiles/polling-dev.dockerfile
+  worker-service:
+    image: storjlabs/auditor-worker-service
+    links:
+      - redis
+    volumes:
+      - "../lib:/worker-service/lib"
+      - "../bin:/worker-service/bin"
+      - "../config.js:/worker-service/config.js"
+    build:
+      context: ..
+      dockerfile: ./dockerfiles/worker.dockerfile
+  server:
+    image: storjlabs/auditor-polling-service
+    links:
+      - redis
+    volumes:
+      - "../lib:/polling-service/lib"
+      - "../bin:/polling-service/bin"
+      - "../config.js:/polling-service/config.js"
+    build:
+      context: ..
+      dockerfile: ./dockerfiles/polling.dockerfile
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"

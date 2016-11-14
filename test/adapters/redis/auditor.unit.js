@@ -3,21 +3,19 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const RQueue = require('../../../lib/adapters/redis/queue.js');
-const Models = require('storj-service-storage-models');
 const Config = require('../../../config');
 
+const Models = function() {};
+
 var stubRefs = {
-  queue: sinon.spy(RQueue),
-  models: sinon.spy(Models),
   verifyStub: sinon.stub(),
   findContact: sinon.stub(),
-  core: sinon.stub(),
   getProof: sinon.stub(),
-  popReadyQueue: sinon.stub(RQueue.prototype, 'popReadyQueue'),
-  pushResultQueue: sinon.stub(RQueue.prototype, 'pushResultQueue'),
-  awaitReadyQueue: sinon.stub(RQueue.prototype, 'awaitReadyQueue'),
-  getPendingQueue: sinon.stub(RQueue.prototype, 'getPendingQueue')
+  popReadyQueue: sinon.stub(),
+  pushResultQueue: sinon.stub(),
+  awaitReadyQueue: sinon.stub(),
+  getPendingQueue: sinon.stub(),
+  managerLoad: sinon.stub()
 };
 
 var Auditor = proxyquire(
@@ -32,10 +30,29 @@ var Auditor = proxyquire(
       },
       Contact: function(farmer) {
         this.farmer = farmer;
+      },
+      StorageManager: function() {
+        return {
+          load: stubRefs.managerLoad
+        }
       }
     },
-    './queue.js': stubRefs.queue,
-    'storj-service-storage-models': stubRefs.models,
+    './queue.js': function() {
+      return {
+        popReadyQueue: stubRefs.popReadyQueue,
+        pushResultQueue: stubRefs.pushResultQueue,
+        awaitReadyQueue: stubRefs.awaitReadyQueue,
+        getPendingQueue: stubRefs.getPendingQueue
+      }
+    },
+    'storj-service-storage-models': function() {
+      return {
+        Contact: {
+          findOne: stubRefs.findContact
+        }
+      }
+    },
+    'storj-mongodb-adapter': function(){},
     'storj-complex': {
       createClient: function() {
         return {
@@ -48,8 +65,6 @@ var Auditor = proxyquire(
 var service;
 var config = JSON.parse(JSON.stringify(Config));
 
-config.auditor.uuid = config.auditor.workers.split(' ')[0];
-delete config.auditor.workers;
 service = new Auditor(config);
 
 describe('audit/adapters/redis/auditor', function() {
@@ -68,7 +83,6 @@ describe('audit/adapters/redis/auditor', function() {
 
     it('instantiates a queue', function() {
       expect(service._queue).to.be.an('object');
-      expect(stubRefs.queue.calledWithNew()).to.be.true;
     });
 
     it('instantiates storj models', function() {

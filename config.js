@@ -41,7 +41,7 @@ const Config = require('rc')('storj-service-auditor', {
     },
 
     maxConcurrency: 20,
-    workers: '123 321',
+    uuid: '123',
   }
 });
 

@@ -3,111 +3,69 @@
 const expect = require('chai').expect;
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const AuditQueue = require('../../../lib/adapters/redis/queue.js');
-const Config = require('../../../config');
+var AuditQueue = function() {};
 
-var popSpy = sinon.spy(AuditQueue.prototype, 'populateReadyQueue');
-var forkStub = function() {
+AuditQueue.prototype.populateReadyQueue = function() {
   return {
-    on: sinon.stub()
+    testProp: true
+  };
+}
+var AuditWorker = function() {
+  return {
+    testProp: true
   };
 };
 
+var Config = require('../../../config');
+
+var popSpy = sinon.spy(AuditQueue.prototype, 'populateReadyQueue');
+
 var AuditService = proxyquire('../../../lib/adapters/redis/service.js',
  {
-  '../../../lib/adapters/redis/queue.js': AuditQueue,
-  'child_process': {
-    fork: forkStub
-  }
+  './queue': AuditQueue,
+  './queueworker': AuditWorker
 });
-
-var service;
-var config;
+Config.auditor.polling.interval = 100;
+const service = new AuditService(Config);
 
 describe('audit/adapters/redis/service', function() {
-  beforeEach(function() {
-    sinon.spy(AuditService.prototype, 'pollBacklog');
-  });
+  describe('#createWorker', function() {
+    var audit_worker;
 
-  afterEach(function() {
-    AuditService.prototype.pollBacklog.restore();
-  });
-
-  describe('@constructor', function() {
     before(function() {
-      sinon.spy(AuditService.prototype, 'addNewWorkerToQueue');
+      audit_worker = service.createWorker();
     });
 
-    it('should not call #pollBacklog if polling option disabled', function() {
-      config = JSON.parse(JSON.stringify(Config));
-      config.auditor.polling = undefined;
-      service = new AuditService(config);
-      expect(service.pollBacklog.called).to.be.false;
-    });
-
-    it('should call #pollBacklog if polling option enabled', function() {
-      config = JSON.parse(JSON.stringify(Config));
-      config.auditor.polling = {
-        interval: 500,
-        padding: 0
-      };
-
-      service = new AuditService(config);
-      expect(service.pollBacklog.called).to.be.true;
-    });
-
-    it('should call #addNewWorkerToQueue for each worker option',
+    it('should return an audit service worker',
       function() {
-        AuditService.prototype.addNewWorkerToQueue.restore();
-        sinon.spy(AuditService.prototype, 'addNewWorkerToQueue');
-        config = JSON.parse(JSON.stringify(Config));
-        service = new AuditService(config);
-        var workers = service._options.auditor.workers.split(' ');
-
-        expect(workers.length).to.equal(service.addNewWorkerToQueue.callCount);
-        AuditService.prototype.addNewWorkerToQueue.restore();
-    });
-
-    it('should repoll at a configured interval', function(done) {
-      this.timeout(1000);
-      config = JSON.parse(JSON.stringify(Config));
-      config.auditor.polling.interval = 500;
-      service = new AuditService(config);
-      setTimeout(testPolled, config.auditor.polling.interval + 100);
-
-      function testPolled() {
-        expect(service.pollBacklog.calledTwice).to.be.true;
-        done();
-      }
+        expect(audit_worker.testProp).to.be.true;
     });
   });
 
-  describe('#addNewWorkerToQueue', function() {
+  describe('#createPoll', function() {
+    var poll_worker;
+
     before(function() {
-      config = JSON.parse(JSON.stringify(Config));
-      service = new AuditService(config);
+      poll_worker = service.createPoll();
     });
 
-    it('should fork a process for each optional worker', function() {
-      var workers = service._options.auditor.workers.split(' ');
-      expect(workers.length === forkStub.callCount);
-    });
-  });
-
-  describe('#pollBacklog', function() {
-    it('should accept a current time padding',
+    it('should return an interval',
       function() {
-        config = JSON.parse(JSON.stringify(Config));
-        config.auditor.polling.interval = 500;
-        config.auditor.polling.padding = 100;
-        service = new AuditService(config);
-        expect(service.pollBacklog.getCall(0).args[0]
-          === config.auditor.polling.padding).to.be.true;
+        expect(poll_worker._onTimeout).to.exist;
     });
 
-    it('should call populateReadyQueue',
+    it('should create an instance of the queue class',
       function() {
-        expect(service._masterPollQueue.populateReadyQueue.called).to.be.true;
+        expect(service.masterPollQueue).to.exist;
+    });
+
+    it('should call populateReadyQueue at the specified interval',
+      function(done) {
+        this.timeout(20000);
+        setTimeout(() => {
+          expect(popSpy.called).to.be.true;
+          done();
+        }, Config.auditor.polling.interval+100);
     });
   });
 });

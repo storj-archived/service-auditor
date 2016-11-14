@@ -24,8 +24,8 @@ stubRefs.auditorStub.get.onCall(2).callsArgWith(0, null, 1);
 stubRefs.auditorStub.process.callsArgWith(1);
 
 const AuditQueueWorker = proxyquire(
-  '../../../lib/adapters/redis/auditqueueworker.js', {
-    './auditor.js': function() {
+  '../../../lib/adapters/redis/queueworker.js', {
+    './auditor': function() {
       return stubRefs.auditorStub;
     },
     'async': stubRefs.queueStub
@@ -44,7 +44,7 @@ stubRefs.flushStub = sinon.spy(AuditQueueWorker.prototype,
 
 var service = new AuditQueueWorker(Config);
 
-describe('audit/adapters/redis/auditqueueworker', function() {
+describe('audit/adapters/redis/worker', function() {
   describe('@constructor', function() {
     it('should take an options object', function() {
       expect(service._options).to.be.an.object;
