@@ -1,6 +1,6 @@
 FROM storjlabs/storj:base
-RUN mkdir /server
-WORKDIR /server
-ADD ./package.json /server/package.json
+RUN mkdir /audits-server
+WORKDIR /audits-server
+ADD ./package.json /audits-server/package.json
 RUN npm install
-CMD /server/bin/server.js
+CMD /server/bin/audits-server.js
