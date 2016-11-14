@@ -17,13 +17,17 @@ Usage
 -----
 
 ### Command Line Interface
-Start the Audit Service
+Start an Audit Worker (Requests jobs from working queue, sleeping when empty):
 ```
-storj-service-auditor
+storj-audits-worker
+```
+Start the Audit Polling Service (interval at which to pop jobs off the backlog onto the working queue):
+```
+storj-audits-polling
 ```
 Start the Audit Service Server to listen for incoming audits:
 ```
-storj-service-auditor-server
+storj-audits-server
 ```
 
 ### Programmatic
