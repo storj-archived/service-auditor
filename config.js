@@ -11,14 +11,12 @@ const Config = require('rc')('audits', {
     passphrase: null,
   },
 
-  db: {
-    host: '127.0.0.1',
-    port: 27017,
-    name: 'storj-bridge-database-name',
-    user: null,
-    pass: null,
-    mongos: false,
-    ssl: false
+  mongo: {
+    uri: '127.0.0.1:27017/storj-bridge-database-name',
+    options: {
+      user: null,
+      pass: null
+    }
   },
 
   storjClient: {
