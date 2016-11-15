@@ -1,6 +1,6 @@
 'use strict';
 
-const Config = require('rc')('storj-service-auditor', {
+const Config = require('rc')('audits', {
   server: {
     host: '127.0.0.1',
     port: 6541,
