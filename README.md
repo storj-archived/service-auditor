@@ -76,17 +76,17 @@ Config
 ------
 See config.js for defaults; config options are set by the following rules:  
   - command line arguments (parsed by minimist)
-  - environment variables prefixed with `storj-service-auditor_`
-  - or use "\_\_" to indicate nested properties <br/> _(e.g. `storj-service-auditor_foo__bar__baz` => `foo.bar.baz`)_
+  - environment variables prefixed with `audits_`
+  - or use "\_\_" to indicate nested properties <br/> _(e.g. `audits_auditor__adapter__host` => `auditor.adapter.host`)_
   - if you passed an option `--config file` then from that file
-  - a local `.storj-service-auditorrc` or the first found looking in `./ ../ ../../ ../../../` etc.
-  - `$HOME/.storj-service-auditorrc`
-  - `$HOME/.storj-service-auditor/config`
-  - `$HOME/.config/storj-service-auditor`
-  - `$HOME/.config/storj-service-auditor/config`
-  - `/etc/storj-service-auditorrc`
-  - `/etc/${appname}/config`
-  - the defaults object you passed in.
+  - a local `.auditsrc` or the first found looking in `./ ../ ../../ ../../../` etc.
+  - `$HOME/.auditsrc`
+  - `$HOME/.audits/config`
+  - `$HOME/.config/audits`
+  - `$HOME/.config/audits/config`
+  - `/etc/auditsrc`
+  - `/etc/audits/config`
+  - the defaults object passed in through config.js.
 
 License
 -------
