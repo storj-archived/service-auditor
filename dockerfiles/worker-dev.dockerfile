@@ -1,4 +1,4 @@
-FROM storjlabs/storj:base
+FROM storjlabs/interpreter:latest
 RUN mkdir /worker
 WORKDIR /worker
 ADD ./package.json /worker/package.json

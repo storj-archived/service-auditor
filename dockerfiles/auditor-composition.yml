@@ -5,9 +5,9 @@ services:
     links:
       - redis
     volumes:
-      - "../lib:/polling-service/lib"
-      - "../bin:/polling-service/bin"
-      - "../config.js:/polling-service/config.js"
+      - "../lib:/polling/lib"
+      - "../bin:/polling/bin"
+      - "../config.js:/polling/config.js"
     build:
       context: ..
       dockerfile: ./dockerfiles/polling-dev.dockerfile
@@ -17,9 +17,9 @@ services:
       - redis
       - mongo
     volumes:
-      - "../lib:/worker-service/lib"
-      - "../bin:/worker-service/bin"
-      - "../config.js:/worker-service/config.js"
+      - "../lib:/worker/lib"
+      - "../bin:/worker/bin"
+      - "../config.js:/worker/config.js"
     build:
       context: ..
       dockerfile: ./dockerfiles/worker.dockerfile
@@ -28,9 +28,9 @@ services:
     links:
       - redis
     volumes:
-      - "../lib:/auditor-server/lib"
-      - "../bin:/auditor-server/bin"
-      - "../config.js:/auditor-server/config.js"
+      - "../lib:/audits-server/lib"
+      - "../bin:/audits-server/bin"
+      - "../config.js:/audits-server/config.js"
     build:
       context: ..
       dockerfile: ./dockerfiles/server.dockerfile
