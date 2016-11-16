@@ -7,7 +7,7 @@ const Config = require('rc')('audits', {
     timeout: 120000,
     cert: null,
     key: null,
-    ca: [],
+    ca: "123, 321",
     passphrase: null,
   },
 
