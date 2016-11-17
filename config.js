@@ -7,7 +7,7 @@ const Config = require('rc')('audits', {
     timeout: 120000,
     cert: null,
     key: null,
-    ca: "123, 321",
+    ca: null, //"123, 321"
     passphrase: null,
   },
 
@@ -21,8 +21,8 @@ const Config = require('rc')('audits', {
 
   storjClient: {
     rpcUrl: 'http://localhost:8080',
-    rpcUser: 'user',
-    rpcPassword: 'pass'
+    rpcUser: null,
+    rpcPassword: null
   },
 
   auditor: {
