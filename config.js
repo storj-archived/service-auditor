@@ -15,7 +15,11 @@ const Config = require('rc')('audits', {
     uri: '127.0.0.1:27017/storj-bridge-database-name',
     options: {
       user: null,
-      pass: null
+      pass: null,
+      ssl: true,
+      mongos: {
+        ssl: true
+      }
     }
   },
 
