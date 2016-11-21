@@ -37,6 +37,7 @@
   },
   "homepage": "https://github.com/Storj/service-auditor#readme",
   "devDependencies": {
+    "storj-complex": "2.0.1",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "ink-docstrap": "^1.1.4",
