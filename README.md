@@ -70,11 +70,11 @@ auditor.on('audit.full.fail', function(audit) {
 ### Endpoints
 | Route   | Method | Parameters  | Description |
 |---------|--------|-------------|-------------|
-| /audit  | POST   | farmer_id, data_hash, root, depth, challenges, store_begin, store_end | add a series of audits to the processing queue  
+| /audit  | POST   | farmer_id, data_hash, root, depth, challenges, store_begin, store_end | add a series of audits to the processing queue
 
 Config
 ------
-See config.js for defaults; config options are set by the following rules:  
+See config.js for defaults; config options are set by the following rules:
   - command line arguments (parsed by minimist)
   - environment variables prefixed with `audits_`
   - or use "\_\_" to indicate nested properties <br/> _(e.g. `audits_auditor__adapter__host` => `auditor.adapter.host`)_
@@ -106,3 +106,4 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
+
