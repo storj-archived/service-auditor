@@ -54,10 +54,10 @@
     "rc": "1.1.6",
     "redis": "2.6.2",
     "restify": "4.1.1",
-    "storj-complex": "bookchin/storj-complex#upgrade/storj-lib-6",
-    "storj-lib": "bookchin/storj-core",
-    "storj-mongodb-adapter": "bookchin/storj-mongodb-adapter#upgrade/storj-lib-6",
+    "storj-complex": "^3.0.0",
+    "storj-lib": "^6.0.0",
+    "storj-mongodb-adapter": "^5.0.0",
     "storj-service-error-types": "^1.0.0",
-    "storj-service-storage-models": "bookchin/storj-service-storage-models#upgrade/storj-lib-6"
+    "storj-service-storage-models": "^6.0.0"
   }
 }
