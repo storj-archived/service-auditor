@@ -47,10 +47,12 @@ var Auditor = proxyquire(
     },
     'storj-service-storage-models': function() {
       return {
-        Contact: {
-          findOne: stubRefs.findContact
+        models: {
+          Contact: {
+            findOne: stubRefs.findContact
+          }
         }
-      }
+      };
     },
     'storj-mongodb-adapter': function(){},
     'storj-complex': {
@@ -143,8 +145,10 @@ describe('audit/adapters/redis/auditor', function() {
     };
 
     service._storjModels = {
-      Contact: {
-        findOne: sinon.stub()
+      models: {
+        Contact: {
+          findOne: sinon.stub()
+        }
       }
     };
 
@@ -156,7 +160,7 @@ describe('audit/adapters/redis/auditor', function() {
       getStorageProof: sinon.stub()
     };
 
-    service._storjModels.Contact.findOne.callsArgWith(1, null, 'storage');
+    service._storjModels.models.Contact.findOne.callsArgWith(1, null, 'storage');
     service._manager.load.callsArgWith(1, null, verifyInput);
     service._storjClient.getStorageProof.callsArgWith(2, null, '123');
 
@@ -166,7 +170,7 @@ describe('audit/adapters/redis/auditor', function() {
     });
 
     it('attempts to locate an in-storage contact', function() {
-      expect(service._storjModels.Contact.findOne.called).to.be.true;
+      expect(service._storjModels.models.Contact.findOne.called).to.be.true;
     });
 
     it('gets a storageItem from the audit hash', function() {
