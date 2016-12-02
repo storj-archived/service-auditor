@@ -160,7 +160,14 @@ describe('audit/adapters/redis/auditor', function() {
       getStorageProof: sinon.stub()
     };
 
-    service._storjModels.models.Contact.findOne.callsArgWith(1, null, 'storage');
+    service._storjModels.models.Contact.findOne.callsArgWith(
+      1,
+      null,
+      {
+        toObject:() => {return 'storage';}
+      }
+    );
+
     service._manager.load.callsArgWith(1, null, verifyInput);
     service._storjClient.getStorageProof.callsArgWith(2, null, '123');
 
