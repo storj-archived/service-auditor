@@ -37,7 +37,6 @@
   },
   "homepage": "https://github.com/Storj/service-auditor#readme",
   "devDependencies": {
-    "storj-complex": "2.0.1",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "ink-docstrap": "^1.1.4",
@@ -50,6 +49,8 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
+    "mongoose": "^4.6.7",
+    "rabbit.js": "0.4.4",
     "async": "2.0.1",
     "kad-logger-json": "0.1.2",
     "rc": "1.1.6",

@@ -18,6 +18,7 @@ services:
     # - audits_auditor__adapter__password=
       - audits_auditor__polling__padding=1000
       - audits_auditor__polling__interval=10000
+
   worker-service:
     image: storjlabs/auditor-worker-service
     links:
@@ -29,7 +30,7 @@ services:
       - "../config.js:/worker/config.js"
     build:
       context: ..
-      dockerfile: ./dockerfiles/worker.dockerfile
+      dockerfile: ./dockerfiles/worker-dev.dockerfile
     environment:
       - audits_auditor__adapter__type=redis
       - audits_auditor__adapter__host=redis
@@ -43,6 +44,7 @@ services:
       - audits_storjClient__rpcUrl=http://localhost:8080
     # - audits_storjClient__rpcUser=
     # - audits_storjClient__rpcPassword=
+
   server:
     image: storjlabs/auditor-server
     links:
@@ -53,7 +55,7 @@ services:
       - "../config.js:/audits-server/config.js"
     build:
       context: ..
-      dockerfile: ./dockerfiles/server.dockerfile
+      dockerfile: ./dockerfiles/server-dev.dockerfile
     environment:
       - audits_auditor__adapter__type=redis
       - audits_auditor__adapter__host=redis
@@ -65,11 +67,49 @@ services:
     # - audits_server__cert=
     # - audits_server__key=
     # - audits_server__ca=
+
   redis:
     image: redis
     ports:
       - "6379:6379"
+
   mongo:
     image: mongo
     ports:
       - "27017:27017"
+
+  e2e:
+    image: storjlabs/e2e
+    links:
+      - redis
+      - mongo
+      - polling-service
+      - worker-service
+      - server
+    volumes:
+      - "../test:/e2e/test"
+      - "../config.js:/e2e/config.js"
+    build:
+      context: ..
+      dockerfile: ./dockerfiles/e2e.dockerfile
+    environment:
+      - audits_auditor__adapter__type=redis
+      - audits_auditor__adapter__host=redis
+      - audits_auditor__adapter__port=6379
+    # - audits_auditor__adapter__password=
+      - audits_auditor__polling__padding=1000
+      - audits_auditor__polling__interval=10000
+      - audits_auditor__maxConcurrency=20
+      - audits_auditor__uuid=0
+      - audits_mongo__uri=mongodb://mongo/storj-bridge-database-name
+    # - audits_mongo__options__user=
+    # - audits_mongo__options__pass=
+      - audits_storjClient__rpcUrl=http://localhost:8080
+    # - audits_storjClient__rpcUser=
+    # - audits_storjClient__rpcPassword=
+      - audits_server__host=127.0.0.1
+      - audits_server__port=8080
+      - audits_server__timeout=120000
+    # - audits_server__cert=
+    # - audits_server__key=
+    # - audits_server__ca=
