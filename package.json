@@ -1,9 +1,9 @@
 {
   "name": "storj-service-auditor",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "send and retrieve queued storj audit proofs",
   "engines": {
-    "node": ">=6.5.0"
+    "node": "^6.9.1"
   },
   "main": "/lib/index.js",
   "bin": {
@@ -37,7 +37,6 @@
   },
   "homepage": "https://github.com/Storj/service-auditor#readme",
   "devDependencies": {
-    "storj-complex": "2.0.1",
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "ink-docstrap": "^1.1.4",
@@ -55,10 +54,10 @@
     "rc": "1.1.6",
     "redis": "2.6.2",
     "restify": "4.1.1",
-    "storj-complex": "^2.0.1",
-    "storj-lib": "^5.1.1",
-    "storj-mongodb-adapter": "^4.0.1",
+    "storj-complex": "^3.0.0",
+    "storj-lib": "^6.0.0",
+    "storj-mongodb-adapter": "^5.0.0",
     "storj-service-error-types": "^1.0.0",
-    "storj-service-storage-models": "^5.1.5"
+    "storj-service-storage-models": "^6.0.0"
   }
 }
