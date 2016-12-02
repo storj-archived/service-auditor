@@ -47,10 +47,12 @@ var Auditor = proxyquire(
     },
     'storj-service-storage-models': function() {
       return {
-        Contact: {
-          findOne: stubRefs.findContact
+        models: {
+          Contact: {
+            findOne: stubRefs.findContact
+          }
         }
-      }
+      };
     },
     'storj-mongodb-adapter': function(){},
     'storj-complex': {
@@ -144,7 +146,9 @@ describe('audit/adapters/redis/auditor', function() {
 
     service._storjModels = {
       models: {
-        Contact: { findOne: sinon.stub() }
+        Contact: {
+          findOne: sinon.stub()
+        }
       }
     };
 
@@ -159,8 +163,11 @@ describe('audit/adapters/redis/auditor', function() {
     service._storjModels.models.Contact.findOne.callsArgWith(
       1,
       null,
-      'storage'
+      {
+        toObject:() => {return 'storage';}
+      }
     );
+
     service._manager.load.callsArgWith(1, null, verifyInput);
     service._storjClient.getStorageProof.callsArgWith(2, null, '123');
 
