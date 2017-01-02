@@ -8,7 +8,6 @@
   "main": "/lib/index.js",
   "bin": {
     "storj-audits-worker": "bin/worker.js",
-    "storj-audits-polling": "bin/polling.js",
     "storj-audits-server": "bin/audits-server.js"
   },
   "scripts": {
@@ -50,11 +49,9 @@
   },
   "dependencies": {
     "mongoose": "^4.6.7",
-    "rabbit.js": "0.4.4",
     "async": "2.0.1",
     "kad-logger-json": "0.1.2",
     "rc": "1.1.6",
-    "redis": "2.6.2",
     "restify": "4.1.1",
     "storj-complex": "^3.0.0",
     "storj-lib": "^6.0.0",

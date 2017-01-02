@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const Config = require('../config');
-const AuditService = require('../lib').service(Config);
-AuditService.createWorker();
+const AuditService = require('../lib').worker;
+
+var worker = new AuditService(Config);
+worker.start();
