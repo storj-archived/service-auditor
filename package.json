@@ -12,7 +12,7 @@
   },
   "scripts": {
     "test": "npm run testsuite",
-    "testsuite": "NODE_ENV=test _mocha test/adapters/**",
+    "testsuite": "NODE_ENV=test _mocha test/**",
     "coverage": "NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive",
     "linter": "./node_modules/.bin/jshint --config .jshintrc ./lib",
     "develop": "NODE_ENV=develop node script/develop.js start",
