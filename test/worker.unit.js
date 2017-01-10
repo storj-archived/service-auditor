@@ -18,7 +18,7 @@ beforeEach(function () {
     },
 
     'mongoose': {
-      createConnection: sinon.stub()
+      createConnection: sandbox.stub()
     },
 
     'storj-lib': {
@@ -61,9 +61,7 @@ beforeEach(function () {
 
   const Worker = proxyquire('../lib/worker', proxyObj);
   worker = new Worker({
-    storjClient: {
-
-    },
+    storjClient: {},
     mongo: {
       uri: 'test',
       options: 'test'
@@ -95,16 +93,16 @@ describe('Worker', function() {
   });
 
   describe('start', function() {
-    beforeEach(function() {
-      worker.start();
-    });
-
     it('should call the audit model\'s popReadyAudits method', () => {
+      worker.start();
       expect(worker._auditModel.popReadyAudits.called).to.be.true;
     });
 
     it('should register and call the queue\'s unsaturated method', () => {
-      expect(worker._readyAuditsCursor.next.callCount).to.equal(1);
+      var nextStub = sandbox.stub();
+      worker._auditModel.popReadyAudits.callsArgWith(0, {next: nextStub});
+      worker.start();
+      expect(nextStub.called).to.be.true;
     });
   });
 
