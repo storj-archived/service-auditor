@@ -2,4 +2,4 @@
 'use strict';
 const Config = require('../config');
 const AuditServer = require('../lib').server;
-AuditServer(Config);
+new AuditServer(Config);
