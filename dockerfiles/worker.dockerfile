@@ -6,3 +6,4 @@ WORKDIR /worker
 ADD ./ /worker/
 RUN npm install
 CMD /worker/bin/worker.js
+#CMD ["/bin/sleep", "60000"]
