@@ -35,11 +35,9 @@ services:
     environment:
       - audits_server__host=127.0.0.1
       - audits_server__port=8080
-      - audits_server__timeout=120000
-    # - audits_server__cert=
-    # - audits_server__key=
-    # - audits_server__ca=
-    # - audits_server__passphrase=
+      - audits_server__options__name=storj-service-auditor
+    # - audits_server__options__certificate=
+    # - audits_server__options__key=
 
   mongo:
     image: mongo

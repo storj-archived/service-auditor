@@ -43,11 +43,11 @@ beforeEach(function () {
     server: {
       host: '127.0.0.1',
       port: 6541,
-      timeout: 120000,
-      cert: null,
-      key: null,
-      ca: null, //"123, 321"
-      passphrase: null,
+      options: {
+        name: 'storj-service-auditor',
+        certificate: null,
+        key: null
+      }
     }
   });
 });
@@ -106,7 +106,6 @@ describe('Server', function() {
     });
 
     it('should call the audit model\'s scheduleFullAudits method', () => {
-      var sendStub = sandbox.stub();
       proxyObj['restify'].createServer().post.callsArgWith(2, {
           params: {
             farmer_id: true,
@@ -120,7 +119,7 @@ describe('Server', function() {
           accepts: () => {}
         },
         {
-          send: sendStub
+          send: () => {}
         },
         () => {}
       );
