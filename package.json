@@ -55,6 +55,6 @@
     "storj-lib": "^6.0.0",
     "storj-mongodb-adapter": "^5.0.0",
     "storj-service-error-types": "^1.0.0",
-    "storj-service-storage-models": "^6.0.0"
+    "storj-service-storage-models": "^7.0.0"
   }
 }
