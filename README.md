@@ -41,16 +41,12 @@ auditModel.scheduleFullAudits(
   },
   aTransformFunctionExampleOrNullForDefaultWhichThisExampleIs,
   (err) => {
-    if (err) {
-      return next(Errors.InternalError);
-    }
-
-    res.send(201);
-    return next();
+    //it happened! or not :(
   }
 );
 //best function name ever
 function aTransformFunctionExampleOrNullForDefaultWhichThisExampleIs(opts, ind) {
+  //ind = index based on challenges iteration
   var auditOutgoingTime;
   var duration = opts.end - opts.start;
   var increment = duration / opts.challenges.length;
