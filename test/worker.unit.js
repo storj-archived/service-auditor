@@ -47,15 +47,14 @@ beforeEach(function () {
       models: {
         Contact: {
           findOne: sandbox.stub()
+        },
+        FullAudit: {
+          popReadyAudits: sandbox.stub().returns({
+            next: sandbox.stub()
+          }),
+          handleAuditResult: sandbox.stub()
         }
       }
-    }),
-
-    './fullauditmodel': sandbox.stub().returns({
-      popReadyAudits: sandbox.stub().returns({
-        next: sandbox.stub()
-      }),
-      handleAuditResult: sandbox.stub()
     })
   };
 
@@ -81,8 +80,12 @@ describe('Worker', function() {
       expect(proxyObj['storj-complex'].createClient.called).to.be.true;
     });
 
-    it('should create an instance of the audit model', () => {
-      expect(proxyObj['./fullauditmodel'].calledWithNew()).to.be.true;
+    it('should create an instance reference to the audit model', () => {
+      expect(worker._auditModel).to.exist;
+    });
+
+    it('should create an instance reference to the contact model', () => {
+      expect(worker._contactModel).to.exist;
     });
 
     it('should create an interal queue', () => {

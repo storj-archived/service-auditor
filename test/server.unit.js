@@ -28,9 +28,12 @@ beforeEach(function () {
       }),
       bodyParser: sandbox.stub()
     },
-
-    '../fullauditmodel': sandbox.stub().returns({
-      scheduleFullAudits: sandbox.stub()
+    'storj-service-storage-models': sandbox.stub().returns({
+      models: {
+        FullAudit: {
+          scheduleFullAudits: sandbox.stub()
+        }
+      }
     })
   };
 
@@ -140,12 +143,12 @@ describe('Server', function() {
         }
       });
 
-      expect(proxyObj['../fullauditmodel']().scheduleFullAudits.called).to.be.true;
+      expect(server._storjModels.model.FullAudit.scheduleFullAudits.called).to.be.true;
     });
 
     it('should return a 201 status code if no errors occur', (done) => {
       var sendStub = sandbox.stub();
-      proxyObj['../fullauditmodel']().scheduleFullAudits.callsArgWith(2, null);
+      proxyObj['storj-service-storage-models']().models.FullAudit.scheduleFullAudits.callsArgWith(2, null);
       proxyObj['restify'].createServer().post.callsArgWith(2, {
           params: {
             farmer_id: true,
