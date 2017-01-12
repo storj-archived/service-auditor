@@ -1,8 +1,3 @@
-Prerequisites
--------------
-* [Redis](http://redis.io/)
-* Alternative message queue implementing abstractauditinterface
-
 Installation
 ------------
 ```
@@ -17,60 +12,59 @@ Usage
 -----
 
 ### Command Line Interface
-Start an Audit Worker (Requests jobs from working queue, sleeping when empty):
+Start an Audit Worker to send scheduled audits:
 ```
 storj-audits-worker
 ```
-Start the Audit Polling Service (interval at which to pop jobs off the backlog onto the working queue):
-```
-storj-audits-polling
-```
-Start the Audit Service Server to listen for incoming audits:
+Start the Audit Service Server to schedule audits:
 ```
 storj-audits-server
 ```
 
 ### Programmatic
 
-Add Audits to the Queue:
+Add Audits to the Queue (requires https://github.com/Storj/service-storage-models):
 
 ```js
-const Auditor = require('storj-service-auditor');
-var auditor = new Auditor.interface(/* optional config overrides */);
-//convenience method for creating an array of jobs from a contract
-var audits = auditor.createAuditJobs({
-  farmer: contr.farmer_id,
-  hash: contr.data_hash,
-  root: auditRecord.root,
-  depth: auditRecord.depth,
-  challenges: auditRecord.challenges,
-  start: contr.store_begin,
-  end: contr.store_end
-});
+const StorageModels = require('storj-service-storage-models')(mongooseConnection);
+var auditModel = StorjModels.models.FullAudit;
 
-auditor.add(audits, function(err, count) {
-  //returns an error or the count of successfully added audits
-});
+auditModel.scheduleFullAudits(
+  {
+    farmer_id: req.params.farmer_id,
+    data_hash: req.params.data_hash,
+    root: req.params.root,
+    depth: req.params.depth,
+    challenges: req.params.challenges,
+    start: req.params.start,
+    end: req.params.end
+  },
+  aTransformFunctionExampleOrNullForDefaultWhichThisExampleIs,
+  (err) => {
+    if (err) {
+      return next(Errors.InternalError);
+    }
+
+    res.send(201);
+    return next();
+  }
+);
+//best function name ever
+function aTransformFunctionExampleOrNullForDefaultWhichThisExampleIs(opts, ind) {
+  var auditOutgoingTime;
+  var duration = opts.end - opts.start;
+  var increment = duration / opts.challenges.length;
+
+  auditOutgoingTime = Math.round(opts.start + (increment * (ind+1)));
+  return auditOutgoingTime;
+}
+
 ```
 
-Listen for Passed and Failed Audits:
-
-```js
-const Auditor = require('storj-service-auditor');
-var auditor = new AuditorInterface.interface(/* optional config overrides */);
-//extends Node's EventEmitter
-auditor.on('audit.full.pass', function(audit) {
-  //returns an audit object
-});
-
-auditor.on('audit.full.fail', function(audit) {
-  //returns an audit object
-});
-```
 ### Endpoints
-| Route   | Method | Parameters  | Description |
-|---------|--------|-------------|-------------|
-| /audit  | POST   | farmer_id, data_hash, root, depth, challenges, store_begin, store_end | add a series of audits to the processing queue
+| Route            | Method | Parameters  | Description |
+|------------------|--------|-------------|-------------|
+| /audit-schedule  | POST   | farmer_id, data_hash, root, depth, challenges, start, end | add a series of audits to the processing queue
 
 Config
 ------
@@ -106,4 +100,3 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
-
