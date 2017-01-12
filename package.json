@@ -8,15 +8,13 @@
   "main": "/lib/index.js",
   "bin": {
     "storj-audits-worker": "bin/worker.js",
-    "storj-audits-polling": "bin/polling.js",
     "storj-audits-server": "bin/audits-server.js"
   },
   "scripts": {
     "test": "npm run testsuite",
-    "testsuite": "NODE_ENV=test _mocha test/adapters/**",
+    "testsuite": "NODE_ENV=test _mocha test/**",
     "coverage": "NODE_ENV=test ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --recursive",
     "linter": "./node_modules/.bin/jshint --config .jshintrc ./lib",
-    "develop": "NODE_ENV=develop node script/develop.js start",
     "make-docs": "./node_modules/.bin/jsdoc index.js lib -r -R README.md -u ./doc -c .jsdoc.json --verbose -d ./jsdoc"
   },
   "repository": {
@@ -49,10 +47,10 @@
     "sinon": "^1.17.2"
   },
   "dependencies": {
+    "mongoose": "^4.6.7",
     "async": "2.0.1",
     "kad-logger-json": "0.1.2",
     "rc": "1.1.6",
-    "redis": "2.6.2",
     "restify": "4.1.1",
     "storj-complex": "^3.0.0",
     "storj-lib": "^6.0.0",
