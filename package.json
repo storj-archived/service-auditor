@@ -1,6 +1,6 @@
 {
   "name": "storj-service-auditor",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "send and retrieve queued storj audit proofs",
   "engines": {
     "node": "^6.9.1"
