@@ -143,7 +143,7 @@ describe('Server', function() {
         }
       });
 
-      expect(server._storjModels.model.FullAudit.scheduleFullAudits.called).to.be.true;
+      expect(server._storjModels.models.FullAudit.scheduleFullAudits.called).to.be.true;
     });
 
     it('should return a 201 status code if no errors occur', (done) => {
