@@ -53,8 +53,8 @@
     "restify": "4.1.1",
     "storj-complex": "^3.0.0",
     "storj-lib": "^6.0.0",
-    "storj-mongodb-adapter": "^5.0.0",
+    "storj-mongodb-adapter": "^7.0.0",
     "storj-service-error-types": "^1.0.0",
-    "storj-service-storage-models": "^7.0.0"
+    "storj-service-storage-models": "^8.0.0"
   }
 }
